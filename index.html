@@ -194,8 +194,8 @@
   <label class="field">Dia do Neo B + Vit. D3 <select id="s_weekDay"></select></label>
   <label class="field">Horário <input type="time" id="s_weekTime"></label>
 
-  <div class="grp">Ferro (3 semanas)</div>
-  <label class="field">1ª dose em <input type="date" id="s_ferroStart"></label>
+  <div class="grp">Ferro (toda quinta, 3 doses)</div>
+  <label class="field">1ª dose a partir de <input type="date" id="s_ferroStart"></label>
   <label class="field">Horário <input type="time" id="s_ferroTime"></label>
   <p class="hint">As outras 2 doses ficam no mesmo dia da semana, nas semanas seguintes.</p>
 
@@ -218,6 +218,8 @@
 
   const DEFAULTS={name:'Jackeline',morning:'08:00',lunch:'12:30',folinBox:30,weekDay:0,weekTime:'09:00',
     ferroStart:keyOf(addDays(todayDate(),1)),ferroTime:'10:00',installed:keyOf(todayDate())};
+  // ferro sempre cai na quinta: a data escolhida anda para a quinta seguinte (ou a própria, se já for quinta)
+  const ferroStartDate=()=>{const d=parseKey(S().ferroStart); return addDays(d,(4-d.getDay()+7)%7);};
 
   // ---------- storage (with in-memory fallback) ----------
   const SKEY='meus-remedios-v1';
@@ -258,7 +260,7 @@
     });
 
     // ferro: 3 weekly doses
-    const fs=parseKey(s.ferroStart);
+    const fs=ferroStartDate();
     let idx=-1; for(let i=0;i<3;i++){ if(addDays(fs,7*i)<=day) idx=i; }
     if(idx>=0){
       const dd=addDays(fs,7*idx), k='ferro|'+keyOf(dd), taken=state.log[k];
@@ -340,7 +342,7 @@
     const wd=Number(s.weekDay);
     let nx=addDays(day,((wd-day.getDay()+7)%7)||7);
     rows.push(['Neo B + Vitamina D3', 'toda '+DAYS[wd]+' · próx. '+fmtShort(nx)]);
-    const fs=parseKey(s.ferroStart);
+    const fs=ferroStartDate();
     const fdates=[0,1,2].map(i=>addDays(fs,7*i));
     const fTaken=fdates.filter(d=>state.log['ferro|'+keyOf(d)]).length;
     const nextF=fdates.find(d=>d>day);
@@ -512,8 +514,8 @@
       ev('multi','💊 Bariat XR / Zirvit Multi',day,s.lunch,'FREQ=DAILY','1 comprimido')];
     if(left>0) out.push(ev('folin','💊 Folin 5mg',day,s.lunch,'FREQ=DAILY;COUNT='+left,'1 comprimido'));
     out.push(ev('semanal','💊 Neo B + Vitamina D3',nextW,s.weekTime,'FREQ=WEEKLY;BYDAY='+BYDAY[wd],'Neo B/Nevrix: 1 comprimido · Vitamina D3: 2 cápsulas'));
-    const fs=parseKey(s.ferroStart);
-    out.push(ev('ferro','💊 Ferro',fs,s.ferroTime,'FREQ=WEEKLY;COUNT=3','1x por semana, 3 semanas'));
+    const fs=ferroStartDate();
+    out.push(ev('ferro','💊 Ferro',fs,s.ferroTime,'FREQ=WEEKLY;COUNT=3','toda quinta, 3 vezes'));
     out.push('END:VCALENDAR');
     return out.join('\r\n');
   }
