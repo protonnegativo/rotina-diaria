@@ -240,7 +240,7 @@
   function itemsFor(day){
     const s=S(), dk=keyOf(day), items=[], doneThisWeek=[];
     const isToday=dk===keyOf(todayDate());
-    items.push({id:'sertralina',key:'sertralina|'+dk,icon:'🌤️',name:'Sertralina',dose:'1 comprimido',time:s.morning});
+    items.push({id:'sertralina',key:'sertralina|'+dk,icon:'🌤️',name:'Sertralina',dose:'1 comprimido, depois do café da manhã',time:s.morning});
     items.push({id:'multi',key:'multi|'+dk,icon:'💊',name:'Bariat XR ou Zirvit Multi',dose:'1 comprimido',time:s.lunch});
     const fk='folin|'+dk, left=Number(s.folinBox)-folinTaken();
     if(left>0 || state.log[fk]) items.push({id:'folin',key:fk,icon:'🌿',name:'Folin 5mg',dose:'1 comprimido',time:s.lunch,
@@ -510,7 +510,7 @@
     const left=Math.max(Number(s.folinBox)-folinTaken(),0);
     const out=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Meus Remedios//PT-BR','CALSCALE:GREGORIAN',
       'BEGIN:VTIMEZONE','TZID:America/Sao_Paulo','BEGIN:STANDARD','DTSTART:19700101T000000','TZOFFSETFROM:-0300','TZOFFSETTO:-0300','TZNAME:-03','END:STANDARD','END:VTIMEZONE',
-      ev('sertralina','💊 Sertralina',day,s.morning,'FREQ=DAILY','1 comprimido'),
+      ev('sertralina','💊 Sertralina',day,s.morning,'FREQ=DAILY','1 comprimido, depois do café da manhã'),
       ev('multi','💊 Bariat XR / Zirvit Multi',day,s.lunch,'FREQ=DAILY','1 comprimido')];
     if(left>0) out.push(ev('folin','💊 Folin 5mg',day,s.lunch,'FREQ=DAILY;COUNT='+left,'1 comprimido'));
     out.push(ev('semanal','💊 Neo B + Vitamina D3',nextW,s.weekTime,'FREQ=WEEKLY;BYDAY='+BYDAY[wd],'Neo B/Nevrix: 1 comprimido · Vitamina D3: 2 cápsulas'));
