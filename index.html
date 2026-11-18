@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Remédios">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FFF8F3">
+<title>Meus Remédios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF4EE; --card:#FFFFFF; --ink:#3A2340; --muted:#9A8798; --line:#F1E4DC;
+    --accent:#D9467A; --accent2:#F28C6B; --accent-soft:#FCE4EC; --ok:#2E9E6A; --ok-soft:#E4F5EC;
+    --warn:#D9822B; --warn-soft:#FCEBD9; --paper:#FFFBF3; --radius:24px;
+    --shadow:0 1px 2px rgba(58,35,64,.04),0 8px 24px rgba(58,35,64,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1A1420; --card:#251D2C; --ink:#F6EEF4; --muted:#AD9CB0; --line:#352B3D;
+      --accent:#F06A98; --accent2:#F59A7C; --accent-soft:#3D2232; --ok:#4CC88A; --ok-soft:#1D3328;
+      --warn:#F0A458; --warn-soft:#3B2C1B; --paper:#2A2230; --shadow:0 8px 24px rgba(0,0,0,.35); }
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,-apple-system,system-ui,sans-serif}
+  body{padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 48px)}
+  .wrap{max-width:520px;margin:0 auto}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;border-radius:30px;padding:22px 20px 20px;color:#fff;
+    background:radial-gradient(120% 140% at 100% 0%,#FFB38A 0%,transparent 55%),linear-gradient(135deg,#C93A73 0%,#E2557F 45%,#F2876A 100%);
+    box-shadow:0 14px 34px rgba(201,58,115,.28)}
+  .hero::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-70px;bottom:-110px;background:rgba(255,255,255,.12)}
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+  .greet{font-size:15px;font-weight:700;opacity:.9}
+  h1{font-family:Fraunces,Georgia,serif;font-size:34px;font-weight:600;margin:2px 0 0;line-height:1.05;letter-spacing:-.01em}
+  h1 em{font-style:italic;font-weight:500}
+  .date{font-weight:700;margin-top:6px;opacity:.85;text-transform:capitalize;font-size:14px}
+  .gear{border:0;background:rgba(255,255,255,.22);width:44px;height:44px;border-radius:50%;font-size:20px;color:#fff;cursor:pointer;flex:none;backdrop-filter:blur(6px)}
+  .progress{position:relative;z-index:1;margin-top:20px;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.16);border-radius:20px;padding:12px 14px;backdrop-filter:blur(6px)}
+  .ring{width:58px;height:58px;flex:none}
+  .ring text{font:900 15px Nunito,sans-serif;fill:#fff}
+  .progress b{font-size:17px;font-weight:900;display:block}
+  .progress span{font-weight:700;font-size:13.5px;opacity:.9}
+
+  /* carta */
+  .love{margin-top:16px;border-radius:var(--radius);padding:18px 18px 16px;background:var(--paper);box-shadow:var(--shadow);position:relative;overflow:hidden;border:1px solid var(--line)}
+  .love::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(transparent 0 33px,rgba(217,70,122,.07) 33px 34px);pointer-events:none}
+  .love-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;position:relative}
+  .love-h small{text-transform:none;letter-spacing:0;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px;font-weight:800;font-size:12px}
+  .love-msg{font-family:Caveat,cursive;font-size:31px;font-weight:600;line-height:1.12;margin-top:10px;position:relative;color:var(--ink)}
+  .w{display:inline-block;margin:0 1px}
+  .w.hid{color:transparent;border-radius:9px;user-select:none;background:linear-gradient(90deg,rgba(217,70,122,.16),rgba(217,70,122,.28),rgba(217,70,122,.16));background-size:200% 100%;animation:shimmer 2.4s linear infinite}
+  .w.key.hid{background:linear-gradient(90deg,rgba(232,163,61,.3),rgba(232,163,61,.55),rgba(232,163,61,.3));background-size:200% 100%}
+  .hero .w.hid,.hero .w.key.hid{background:linear-gradient(90deg,rgba(255,255,255,.25),rgba(255,255,255,.5),rgba(255,255,255,.25));background-size:200% 100%}
+  .w.key.show{color:var(--accent);font-weight:700}
+  @keyframes shimmer{to{background-position:-200% 0}}
+  .w.pop{animation:pop .7s ease-out}
+  @keyframes pop{0%{filter:blur(8px);opacity:0;transform:scale(.6)}60%{transform:scale(1.15)}100%{filter:none;opacity:1;transform:none}}
+  .love-foot{margin-top:10px;color:var(--muted);font-weight:700;font-size:13.5px;position:relative}
+  .love.complete{background:linear-gradient(135deg,#FFE3EC,#FFF2DC);border-color:transparent}
+  @media (prefers-color-scheme: dark){.love.complete{background:linear-gradient(135deg,#4A2335,#3D3020)}}
+  .heart{position:absolute;font-size:22px;pointer-events:none;animation:float 1.8s ease-out forwards;z-index:2}
+  @keyframes float{0%{opacity:1;transform:translateY(0) scale(.6)}100%{opacity:0;transform:translateY(-150px) scale(1.3)}}
+
+  /* remédios */
+  .slot{margin-top:24px}
+  .slot-h{display:flex;align-items:center;gap:8px;margin:0 6px 10px}
+  .slot-h h2{font-family:Fraunces,Georgia,serif;font-size:21px;margin:0;font-weight:600;color:var(--ink)}
+  .slot-h .t{font-weight:800;font-size:13px;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px}
+  .med{width:100%;border:0;background:var(--card);border-radius:22px;padding:14px;display:flex;align-items:center;gap:14px;text-align:left;margin-bottom:10px;box-shadow:var(--shadow);font:inherit;color:inherit;cursor:pointer;transition:transform .12s, background .25s}
+  .med:active{transform:scale(.97)}
+  .pill{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:25px;flex:none}
+  .med .info{flex:1;min-width:0}
+  .med .name{font-weight:800;font-size:16.5px;line-height:1.2}
+  .med .dose{color:var(--muted);font-weight:700;font-size:13.5px;margin-top:3px}
+  .tag{display:inline-block;margin-top:7px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px}
+  .tag.late{background:var(--warn-soft);color:var(--warn)}
+  .tag.info{background:var(--accent-soft);color:var(--accent)}
+  .check{width:32px;height:32px;border-radius:50%;border:2.5px solid var(--line);flex:none;display:grid;place-items:center;font-size:16px;color:#fff;font-weight:900;transition:all .2s}
+  .med.done{background:var(--ok-soft);box-shadow:none}
+  .med.done .check{background:var(--ok);border-color:var(--ok);transform:scale(1.08)}
+  .med.done .name{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+
+  .card{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin-top:12px;box-shadow:var(--shadow)}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-weight:800;font-size:15px;gap:10px}
+  .row:last-child{border-bottom:0}
+  .row small{color:var(--muted);font-weight:700;text-align:right}
+  .week{display:flex;justify-content:space-between;margin-top:2px}
+  .day{text-align:center;font-size:12px;font-weight:800;color:var(--muted);flex:1;text-transform:capitalize}
+  .dot{width:32px;height:32px;border-radius:12px;margin:7px auto 0;background:var(--line);display:grid;place-items:center;color:#fff;font-size:14px}
+  .dot.full{background:var(--ok)} .dot.part{background:var(--warn)} .dot.miss{background:#D9667A}
+  .dot.today{outline:2.5px solid var(--accent);outline-offset:2px}
+  .btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;margin-top:12px}
+  .btn.primary{background:linear-gradient(135deg,#D9467A,#F2876A);color:#fff;box-shadow:0 8px 18px rgba(217,70,122,.25)}
+  .btn.ghost{background:var(--accent-soft);color:var(--accent)}
+  .hint{color:var(--muted);font-size:13.5px;font-weight:700;line-height:1.45}
+  .sec-title{margin:30px 6px 0;font-family:Fraunces,Georgia,serif;font-size:21px;font-weight:600;color:var(--ink)}
+
+  /* ajustes */
+  .sheet-bg{position:fixed;inset:0;background:rgba(30,15,30,.4);display:none;z-index:10;backdrop-filter:blur(2px)}
+  .sheet{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--bg);border-radius:28px 28px 0 0;padding:12px 18px calc(env(safe-area-inset-bottom) + 24px);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:11}
+  .sheet::before{content:"";display:block;width:40px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 14px}
+  .sheet:not(.open){visibility:hidden;transition:transform .28s,visibility 0s .28s}
+  .sheet.open{transform:none}
+  .sheet h3{margin:0 0 4px;font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:600}
+  .field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-weight:800}
+  .field input,.field select{font:inherit;font-weight:800;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0;max-width:55%}
+  .grp{margin-top:20px;font-size:12px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.12em}
+  .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:99px;font-weight:800;transition:transform .25s;z-index:20;white-space:nowrap}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+
+  /* ===== tema princesa (dias especiais) ===== */
+  body.princess{--bg:#FAF0FA;--accent:#A84BC4;--accent-soft:#F2E2F8;--ok:#C9962B;--ok-soft:#FFF4D9;--paper:#FFF8FC;--line:#EEDCF0;
+    background:radial-gradient(circle at 12% 18%,rgba(233,196,106,.35) 0 2px,transparent 3px),radial-gradient(circle at 78% 42%,rgba(216,91,181,.25) 0 2px,transparent 3px),radial-gradient(circle at 40% 76%,rgba(233,196,106,.3) 0 2px,transparent 3px),var(--bg);background-size:140px 140px,180px 180px,160px 160px,auto}
+  @media (prefers-color-scheme: dark){body.princess{--bg:#1E1426;--accent:#D58AF0;--accent-soft:#3A2246;--ok:#E3B54E;--ok-soft:#3A3020;--paper:#2B1F33;--line:#3E2D48}}
+  body.princess .hero{background:radial-gradient(120% 140% at 100% 0%,#FFD6A0 0%,transparent 50%),linear-gradient(135deg,#7E3FC0 0%,#C44FAE 50%,#F08DB8 100%);box-shadow:0 14px 34px rgba(126,63,192,.32);border:2px solid rgba(255,218,130,.75)}
+  body.princess .hero::before{content:"✦  ✧   ✦    ✧  ✦";position:absolute;top:10px;left:46%;color:rgba(255,230,160,.85);font-size:14px;letter-spacing:4px;white-space:nowrap;animation:twinkle 2.6s ease-in-out infinite}
+  @keyframes twinkle{50%{opacity:.35}}
+  body.princess h1 em{color:#FFF3C9;text-shadow:0 2px 12px rgba(255,200,90,.45)}
+  body.princess .love{border:2px solid #E9C46A}
+  body.princess .love::before{background:repeating-linear-gradient(transparent 0 33px,rgba(168,75,196,.08) 33px 34px)}
+  body.princess .w.key.hid{background:linear-gradient(90deg,rgba(233,196,106,.45),rgba(233,196,106,.8),rgba(233,196,106,.45));background-size:200% 100%}
+  body.princess .slot-h h2,body.princess .sec-title{color:var(--accent)}
+  body.princess .slot-h h2::after,body.princess .sec-title::after{content:" ✨";font-size:15px}
+  body.princess .med{border:1.5px solid rgba(233,196,106,.45)}
+  body.princess .med.done{border-color:transparent}
+  body.princess .btn.primary{background:linear-gradient(135deg,#8E44C8,#E07AB5)}
+  body.princess .banner{display:block}
+  .banner{display:none;text-align:center;margin:14px 0 0;font-family:Caveat,cursive;font-size:24px;font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="greet" id="greet">Bom dia,</div>
+        <h1 id="hello"><em>Jackeline</em></h1>
+        <div class="date" id="today"></div>
+      </div>
+      <button class="gear" id="openSettings" aria-label="Ajustes">⚙️</button>
+    </div>
+    <div class="progress">
+      <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="6"/><circle id="ringFg" cx="29" cy="29" r="24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="150.8" style="transition:stroke-dashoffset .5s"/><text id="ringTxt" x="29" y="34" text-anchor="middle">0</text></svg>
+      <div><b id="progTxt">—</b><span id="progSub">Toque no remédio quando tomar</span></div>
+    </div>
+  </section>
+
+  <div class="banner">👑 Hoje o dia é todo seu, alteza 👑</div>
+  <div class="love" id="love">
+    <div class="love-h">💌 Carta do dia <small id="loveCount"></small></div>
+    <div class="love-msg" id="loveMsg"></div>
+    <div class="love-foot" id="loveFoot"></div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="sec-title">Últimos 7 dias</div>
+  <div class="card"><div class="week" id="week"></div>
+    <p class="hint" style="margin:12px 0 0">✓ = tomou todos os remédios diários. Laranja = faltou algum.</p></div>
+
+  <div class="sec-title">Próximos</div>
+  <div class="card" id="upcoming"></div>
+
+  <div class="sec-title">Lembretes no iPhone</div>
+  <div class="card">
+    <p class="hint" style="margin:0">Para o iPhone apitar no horário, adicione os lembretes ao app Calendário (usa os horários dos Ajustes).</p>
+    <button class="btn primary" id="icsBtn" style="display:none">🔔 Baixar lembretes pro Calendário</button>
+    <p class="hint" id="icsNote" style="margin:10px 0 0">Depois de baixar, abra o arquivo e toque em <b>Adicionar Todos</b>.</p>
+  </div>
+
+</div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet">
+  <h3>Ajustes</h3>
+  <p class="hint" style="margin:0">Os horários e dias podem ser mudados quando quiser.</p>
+
+  <div class="grp">Você</div>
+  <label class="field">Seu nome <input id="s_name" placeholder="Ex.: Jack"></label>
+
+  <div class="grp">Todo dia</div>
+  <label class="field">Sertralina <input type="time" id="s_morning"></label>
+  <label class="field">Multivitamínico + Folin <input type="time" id="s_lunch"></label>
+  <label class="field">Comprimidos na caixa de Folin <input type="number" min="1" max="200" id="s_folinBox" style="width:90px"></label>
+
+  <div class="grp">1x por semana</div>
+  <label class="field">Dia do Neo B + Vit. D3 <select id="s_weekDay"></select></label>
+  <label class="field">Horário <input type="time" id="s_weekTime"></label>
+
+  <div class="grp">Ferro (3 semanas)</div>
+  <label class="field">1ª dose em <input type="date" id="s_ferroStart"></label>
+  <label class="field">Horário <input type="time" id="s_ferroTime"></label>
+  <p class="hint">As outras 2 doses ficam no mesmo dia da semana, nas semanas seguintes.</p>
+
+  <button class="btn primary" id="saveSettings">Salvar</button>
+  <button class="btn ghost" id="closeSettings">Fechar</button>
+  <p class="hint" style="margin-top:16px">Os registros ficam guardados neste iPhone. Dúvida sobre horário ou como tomar? Confirme com o médico ou farmacêutico.</p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const DAYS=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  const pad=n=>String(n).padStart(2,'0');
+  const keyOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const parseKey=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+  const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+  const fmtShort=d=>d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
+  const now=()=>new Date();
+  const todayDate=()=>{const n=now();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+
+  const DEFAULTS={name:'Jackeline',morning:'08:00',lunch:'12:30',folinBox:30,weekDay:0,weekTime:'09:00',
+    ferroStart:keyOf(addDays(todayDate(),1)),ferroTime:'10:00',installed:keyOf(todayDate())};
+
+  // ---------- storage (with in-memory fallback) ----------
+  const SKEY='meus-remedios-v1';
+  let mem=null;
+  function load(){
+    try{const raw=localStorage.getItem(SKEY); if(raw) return JSON.parse(raw);}catch(e){}
+    return mem || {settings:{...DEFAULTS},log:{}};
+  }
+  function save(){ mem=state; try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(e){} }
+  let state=load();
+  state.settings={...DEFAULTS,...state.settings};
+  state.log=state.log||{};
+
+  // ---------- medicine logic ----------
+  const S=()=>state.settings;
+  const folinTaken=()=>Object.keys(state.log).filter(k=>k.startsWith('folin|')).length;
+
+  function itemsFor(day){
+    const s=S(), dk=keyOf(day), items=[], doneThisWeek=[];
+    const isToday=dk===keyOf(todayDate());
+    items.push({id:'sertralina',key:'sertralina|'+dk,icon:'🌤️',name:'Sertralina',dose:'1 comprimido',time:s.morning});
+    items.push({id:'multi',key:'multi|'+dk,icon:'💊',name:'Bariat XR ou Zirvit Multi',dose:'1 comprimido',time:s.lunch});
+    const fk='folin|'+dk, left=Number(s.folinBox)-folinTaken();
+    if(left>0 || state.log[fk]) items.push({id:'folin',key:fk,icon:'🌿',name:'Folin 5mg',dose:'1 comprimido',time:s.lunch,
+      tag:{cls:'info',txt: state.log[fk] ? (left<=0?'Última da caixa! ✨':'Restam '+left+' na caixa') : 'Restam '+left+' na caixa'}});
+
+    // weekly: Neo B + D3
+    const wd=Number(s.weekDay);
+    const cycle=addDays(day,-((day.getDay()-wd+7)%7)), ck=keyOf(cycle);
+    const lateTag=d=>({cls:'late',txt:'Atrasado — era '+DAYS[d.getDay()]});
+    [['neob','🧡','Neo B ou Nevrix','1 comprimido'],['d3','☀️','Vitamina D3 15.000 UI','2 cápsulas']].forEach(([id,icon,name,dose])=>{
+      const k=id+'|'+ck, taken=state.log[k];
+      const it={id,key:k,icon,name,dose,time:s.weekTime};
+      const installed=parseKey(s.installed);
+      if(keyOf(cycle)===dk) items.push(it);
+      else if(!taken && cycle>=installed) items.push({...it,tag:lateTag(cycle)});
+      else if(taken && isToday) doneThisWeek.push(name);
+    });
+
+    // ferro: 3 weekly doses
+    const fs=parseKey(s.ferroStart);
+    let idx=-1; for(let i=0;i<3;i++){ if(addDays(fs,7*i)<=day) idx=i; }
+    if(idx>=0){
+      const dd=addDays(fs,7*idx), k='ferro|'+keyOf(dd), taken=state.log[k];
+      const it={id:'ferro',key:k,icon:'🩸',name:'Ferro',dose:'Dose '+(idx+1)+' de 3',time:s.ferroTime};
+      if(keyOf(dd)===dk) items.push(it);
+      else if(!taken) items.push({...it,tag:lateTag(dd)});
+      else if(isToday) doneThisWeek.push('Ferro (dose '+(idx+1)+')');
+    }
+    items.sort((a,b)=>a.time.localeCompare(b.time));
+    return {items,doneThisWeek};
+  }
+
+  const TINT={sertralina:'#3B82C4',multi:'#8B5CF6',folin:'#2E9E6A',neob:'#F28C38',d3:'#E8B020',ferro:'#D94A5A'};
+  let lastNameRev=null;
+  // ---------- render ----------
+  const $=id=>document.getElementById(id);
+  function slotName(t){const h=+t.slice(0,2); return h<12?'Manhã':h<18?'Tarde':'Noite';}
+
+  function render(){
+    const day=todayDate(), s=S();
+    const pr=isPrincess(); document.body.classList.toggle('princess',pr);
+    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':'💌 Carta do dia ';
+    const hr=now().getHours();
+    const cu=CUSTOM[keyOf(day)];
+    const pre=itemsFor(day).items, allDone=pre.length>0&&pre.every(i=>state.log[i.key]);
+    if(cu&&typeof cu==='object'&&cu.name){
+      $('greet').textContent=cu.greet||'Oi,';
+      const isNew=allDone&&!lastNameRev; lastNameRev=allDone;
+      $('hello').innerHTML=allDone?'<em class="w show'+(isNew?' pop':'')+'">'+esc(cu.name)+'</em> 👑':'<em><span class="w key hid">'+esc(cu.name)+'</span></em>';
+    }else{
+      $('greet').textContent=(hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite')+(s.name?',':' 💗');
+      $('hello').innerHTML=s.name?'<em>'+esc(s.name)+'</em> '+(hr<18?'☀️':'🌙'):'';
+    }
+    $('today').textContent=day.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+    const {items,doneThisWeek}=itemsFor(day);
+    const done=items.filter(i=>state.log[i.key]).length;
+    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
+    $('progSub').textContent=done===items.length?(pr?'A coroa é sua hoje ✨':'Arrasou, até amanhã 💚'):(pr?'Toque no remédio quando tomar, princesa':'Toque no remédio quando tomar');
+    $('ringFg').setAttribute('stroke-dashoffset',150.8*(1-(items.length?done/items.length:1)));
+    $('ringTxt').textContent=done===items.length?'✓':done+'/'+items.length; $('ringTxt').style.fontSize=done===items.length?'26px':'15px'; $('ringTxt').setAttribute('y',done===items.length?'38':'34');
+
+    const groups={};
+    items.forEach(i=>{(groups[i.time]=groups[i.time]||[]).push(i)});
+    let html='';
+    Object.keys(groups).sort().forEach(t=>{
+      html+='<div class="slot"><div class="slot-h"><h2>'+slotName(t)+'</h2><span class="t">'+t+'</span></div>';
+      groups[t].forEach(i=>{
+        const taken=state.log[i.key];
+        html+='<button class="med'+(taken?' done':'')+'" data-key="'+i.key+'">'+
+          '<div class="pill" style="background:'+(TINT[i.id]||'#D9467A')+'24">'+i.icon+'</div><div class="info"><div class="name">'+i.name+'</div>'+
+          '<div class="dose">'+i.dose+(taken?' · tomado às '+taken:'')+'</div>'+
+          (i.tag&&!taken?'<span class="tag '+i.tag.cls+'">'+i.tag.txt+'</span>':'')+
+          (i.tag&&taken&&i.tag.cls==='info'?'<span class="tag info">'+i.tag.txt+'</span>':'')+
+          '</div><div class="check">'+(taken?'✓':'')+'</div></button>';
+      });
+      html+='</div>';
+    });
+    renderLove(done,items.length);
+    if(doneThisWeek.length) html+='<div class="card"><div class="hint">Já tomados esta semana ✓<br><b style="color:var(--ink)">'+doneThisWeek.join(' · ')+'</b></div></div>';
+    $('list').innerHTML=html;
+    document.querySelectorAll('.med').forEach(b=>b.onclick=()=>toggle(b.dataset.key));
+
+    // week history
+    let w='';
+    for(let i=6;i>=0;i--){
+      const d=addDays(day,-i), dk=keyOf(d);
+      const need=['sertralina|'+dk,'multi|'+dk];
+      const n=need.filter(k=>state.log[k]).length;
+      const before=d<parseKey(s.installed);
+      let cls='', mark='';
+      if(i===0){cls=n===2?'full':n===1?'part':''; mark=n===2?'✓':'';}
+      else if(!before){cls=n===2?'full':n===1?'part':'miss'; mark=n===2?'✓':n===0?'·':'';}
+      w+='<div class="day">'+DAYS[d.getDay()].slice(0,3)+'<div class="dot '+cls+(i===0?' today':'')+'">'+mark+'</div></div>';
+    }
+    $('week').innerHTML=w;
+
+    // upcoming
+    const rows=[];
+    const wd=Number(s.weekDay);
+    let nx=addDays(day,((wd-day.getDay()+7)%7)||7);
+    rows.push(['Neo B + Vitamina D3', 'toda '+DAYS[wd]+' · próx. '+fmtShort(nx)]);
+    const fs=parseKey(s.ferroStart);
+    const fdates=[0,1,2].map(i=>addDays(fs,7*i));
+    const fTaken=fdates.filter(d=>state.log['ferro|'+keyOf(d)]).length;
+    const nextF=fdates.find(d=>d>day);
+    if(fdates[2]<day && fTaken>=0 && !nextF) rows.push(['Ferro', fTaken===3?'concluído 🎉':'tratamento encerrado ('+fTaken+'/3)']);
+    else rows.push(['Ferro', fTaken+'/3 tomados'+(nextF?' · próx. '+fmtShort(nextF):'')]);
+    const left=Number(s.folinBox)-folinTaken();
+    rows.push(['Folin 5mg', left>0?('restam '+left+' comprimidos'):'caixa concluída ✨']);
+    $('upcoming').innerHTML=rows.map(r=>'<div class="row">'+r[0]+'<small>'+r[1]+'</small></div>').join('');
+  }
+
+  // ---------- mensagem do dia ----------
+  // [palavra] = palavra-surpresa, só aparece quando todos os remédios do dia forem tomados
+  const MSGS=[
+    'Bom dia, meu amor. Você é a melhor parte do meu [dia].',
+    'Cuidar de você é cuidar do que eu mais [amo].',
+    'Você é mais forte do que imagina, e eu tenho muito [orgulho] de você.',
+    'Lembrete oficial: você é linda e eu sou muito [sortudo].',
+    'Te devo um beijo extra hoje. Pode cobrar [depois].',
+    'Remédio tomado, coração quentinho. Te amo [muito].',
+    'Se eu pudesse, tomava todos por você. Mas posso te dar um [abraço].',
+    'Cada dia contigo vale muito a [pena].',
+    'Você cuidando de você é a coisa mais linda de [ver].',
+    'Prêmio de hoje: um [cafuné] garantido.',
+    'Missão cumprida! Você merece um [chocolate].',
+    'Eu escolheria você em todas as [vidas].',
+    'Seu sorriso conserta qualquer dia [ruim].',
+    'Hoje à noite tem [chamego] te esperando.',
+    'Você é minha pessoa [favorita] no mundo inteiro.',
+    'Obrigado por existir e por me deixar te [amar].',
+    'Passo a passo, um dia de cada vez. Tô sempre [contigo].',
+    'Vale-pedido: hoje você escolhe o [filme].',
+    'Você é minha paz no meio do [caos].',
+    'Sabia que eu penso em você o dia [inteiro]?',
+    'Quem cuida da saúde ganha [beijo]. Regras são regras.',
+    'Você faz tudo na minha vida ficar mais [leve].',
+    'Meu lugar favorito no mundo é do seu [lado].',
+    'Tô torcendo por você em cada pequena [vitória].',
+    'Vale-pedido: uma massagem nos [pés].',
+    'Nada é tão bonito quanto você [rindo].',
+    'Hoje é um ótimo dia pra eu te dizer que te [amo].',
+    'Você é o meu melhor [presente].',
+    'Disciplina de campeã! Tô [impressionado].',
+    'Até nos dias difíceis você brilha. [Sempre].',
+    'Vale-pedido: jantar onde você [quiser].',
+    'Obrigado por cuidar de você. Isso cuida de [mim] também.',
+    'Já te disse hoje que você é [incrível]?',
+    'Amo cada pequeno [detalhe] seu.',
+    'Com você até segunda-feira fica [bonita].',
+    'Você é a resposta pra tudo que eu pedi pro [universo].',
+    'Bom dia pra mulher mais [linda] que eu conheço.',
+    'Você não precisa ser perfeita. Só precisa ser [você].',
+    'Cada remédio tomado é um carinho que você faz em [si] mesma.',
+    'Se cuidar também é um ato de [amor].',
+    'Eu gosto de você num nível que nem dá pra [explicar].',
+    'Vale-pedido: um café da manhã na [cama].',
+    'Seu abraço é o meu lugar mais [seguro].',
+    'Hoje eu acordei pensando em [você]. De novo.',
+    'Você ilumina qualquer [lugar] onde chega.',
+    'Mais um dia vencido. Você é [incrível], sabia?',
+    'Você é a minha melhor [decisão].',
+    'Tenho tanta sorte de te ter na minha [vida].',
+    'Seu cheiro é o meu favorito no [mundo].',
+    'Pequenos passos também levam [longe].',
+    'Vale-pedido: um sorvete de sua [escolha].',
+    'Eu amo te ver feliz. É a minha coisa [preferida].',
+    'Você é bem mais forte do que esse dia [difícil].',
+    'Te amo hoje, amanhã e [sempre].',
+    'Com você tudo vira [aventura].',
+    'Sabe o que eu queria agora? Um [beijo] seu.',
+    'Vale-pedido: uma tarde inteira de [preguiça] juntos.',
+    'Seus olhos são a coisa mais [bonita] que eu já vi.',
+    'Você deixa meu coração [quentinho].',
+    'Eu escolho você. Todo santo [dia].',
+    'Obrigado por ser essa pessoa tão [especial].',
+    'Você é brava, linda e [minha].',
+    'Missão de hoje concluída. Recompensa: [abraço] apertado.',
+    'Nenhum dia é ruim quando termina [contigo].',
+    'Vale-pedido: um passeio só nosso no fim de [semana].',
+    'Você merece todo o cuidado do [mundo].',
+    'Meu dia só começa de verdade com uma mensagem [sua].',
+    'Você é a minha [princesa]. Ponto final.',
+    'Cuidar de você é o meu jeito favorito de [amar].',
+    'Já disse hoje que tô [apaixonado]?'
+  ];
+  // mensagens com data marcada (têm prioridade sobre a lista automática)
+  const CUSTOM={
+    // name: o que aparece no lugar do nome (escondido até tomar tudo)
+    '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'}
+  };
+  const PRINCESS_DAYS=['2026-11-18'];
+  const isPrincess=()=>PRINCESS_DAYS.includes(keyOf(todayDate()));
+  function messageFor(day){
+    const dk=keyOf(day);
+    if(CUSTOM[dk]) return typeof CUSTOM[dk]==='string'?CUSTOM[dk]:CUSTOM[dk].text;
+    const dn=dayNum(day);
+    return MSGS[((dn%MSGS.length)+MSGS.length)%MSGS.length];
+  }
+  function parseWords(raw){
+    const words=raw.split(/\s+/).filter(Boolean).map(t=>{const m=t.match(/^(.*?)\[(.+?)\](.*)$/);return m?{txt:m[1]+m[2]+m[3],key:true}:{txt:t,key:false}});
+    if(!words.some(w=>w.key)&&words.length) words[words.length-1].key=true;
+    return words;
+  }
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function seededRand(seed){let x=seed%2147483647; if(x<=0)x+=2147483646; return()=>(x=x*16807%2147483647)/2147483647;}
+  const dayNum=d=>Math.round(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);
+  let lastLove={day:null,shown:new Set(),complete:false};
+  function renderLove(done,total){
+    const day=todayDate(), dn=dayNum(day);
+    const raw=messageFor(day), dk=keyOf(day)+'|'+raw;
+    const words=parseWords(raw);
+    const others=words.map((w,i)=>i).filter(i=>!words[i].key);
+    const r=seededRand(dn); for(let i=others.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[others[i],others[j]]=[others[j],others[i]];}
+    const complete=total>0&&done>=total;
+    const nShow=complete?others.length:Math.floor(others.length*done/Math.max(total,1));
+    const show=new Set(others.slice(0,nShow));
+    if(complete) words.forEach((w,i)=>{if(w.key)show.add(i)});
+    if(lastLove.day!==dk) lastLove={day:dk,shown:new Set(show),complete};
+    $('loveMsg').innerHTML=words.map((w,i)=>{
+      const vis=show.has(i), isNew=vis&&!lastLove.shown.has(i);
+      return '<span class="w'+(w.key?' key':'')+(vis?' show':' hid')+(isNew?' pop':'')+'">'+esc(w.txt)+'</span>';
+    }).join(' ');
+    const left=total-done;
+    $('loveCount').textContent=done+'/'+total;
+    $('loveFoot').textContent=complete?'Mensagem completa 💗 Até amanhã!':
+      (done===0?'Cada remédio tomado revela um pedacinho…':'Falta'+(left>1?'m ':' ')+left+' pra descobrir a palavra secreta ✨');
+    $('love').classList.toggle('complete',complete);
+    if(complete&&!lastLove.complete) hearts();
+    lastLove.shown=show; lastLove.complete=complete;
+  }
+  function hearts(){
+    const box=$('love');
+    for(let i=0;i<12;i++){const h=document.createElement('span');h.className='heart';h.textContent=(isPrincess()?['👑','💖','✨','🌸']:['💗','💖','✨','💕'])[i%4];
+      h.style.left=(8+Math.random()*84)+'%';h.style.bottom='0';h.style.animationDelay=(Math.random()*.6)+'s';
+      box.appendChild(h);setTimeout(()=>h.remove(),2600);}
+  }
+
+  function toggle(k){
+    if(state.log[k]){ delete state.log[k]; toast('Desmarcado'); }
+    else{ const n=now(); state.log[k]=pad(n.getHours())+':'+pad(n.getMinutes()); toast(isPrincess()?'Anotado, alteza! 👑':'Anotado! 💚'); if(navigator.vibrate) try{navigator.vibrate(15)}catch(e){} }
+    save(); render();
+  }
+
+  let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1400);}
+
+  // ---------- settings ----------
+  $('s_weekDay').innerHTML=DAYS.map((d,i)=>'<option value="'+i+'">'+d[0].toUpperCase()+d.slice(1)+'</option>').join('');
+  const fields=['name','morning','lunch','folinBox','weekDay','weekTime','ferroStart','ferroTime'];
+  function openSheet(){fields.forEach(f=>$('s_'+f).value=S()[f]);$('sheetBg').style.display='block';requestAnimationFrame(()=>$('sheet').classList.add('open'));}
+  function closeSheet(){$('sheet').classList.remove('open');setTimeout(()=>$('sheetBg').style.display='none',250);}
+  $('openSettings').onclick=openSheet; $('closeSettings').onclick=closeSheet; $('sheetBg').onclick=closeSheet;
+  $('saveSettings').onclick=()=>{
+    fields.forEach(f=>{const v=$('s_'+f).value; if(v!=='') state.settings[f]=(f==='folinBox'||f==='weekDay')?Number(v):v.trim();});
+    save(); closeSheet(); render(); toast('Salvo ✓');
+  };
+
+  // ---------- calendar reminders (.ics) ----------
+  const BYDAY=['SU','MO','TU','WE','TH','FR','SA'];
+  function ics(){
+    const s=S(), day=todayDate(), stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+    const dt=(d,t)=>keyOf(d).replace(/-/g,'')+'T'+t.replace(':','')+'00';
+    const ev=(uid,title,d,t,rrule,desc)=>['BEGIN:VEVENT','UID:'+uid+'@meus-remedios','DTSTAMP:'+stamp,
+      'DTSTART;TZID=America/Sao_Paulo:'+dt(d,t),'DURATION:PT15M','SUMMARY:'+title,'DESCRIPTION:'+desc,'RRULE:'+rrule,
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+title,'TRIGGER:PT0M','END:VALARM','END:VEVENT'].join('\r\n');
+    const wd=Number(s.weekDay), nextW=addDays(day,(wd-day.getDay()+7)%7);
+    const left=Math.max(Number(s.folinBox)-folinTaken(),0);
+    const out=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Meus Remedios//PT-BR','CALSCALE:GREGORIAN',
+      'BEGIN:VTIMEZONE','TZID:America/Sao_Paulo','BEGIN:STANDARD','DTSTART:19700101T000000','TZOFFSETFROM:-0300','TZOFFSETTO:-0300','TZNAME:-03','END:STANDARD','END:VTIMEZONE',
+      ev('sertralina','💊 Sertralina',day,s.morning,'FREQ=DAILY','1 comprimido'),
+      ev('multi','💊 Bariat XR / Zirvit Multi',day,s.lunch,'FREQ=DAILY','1 comprimido')];
+    if(left>0) out.push(ev('folin','💊 Folin 5mg',day,s.lunch,'FREQ=DAILY;COUNT='+left,'1 comprimido'));
+    out.push(ev('semanal','💊 Neo B + Vitamina D3',nextW,s.weekTime,'FREQ=WEEKLY;BYDAY='+BYDAY[wd],'Neo B/Nevrix: 1 comprimido · Vitamina D3: 2 cápsulas'));
+    const fs=parseKey(s.ferroStart);
+    out.push(ev('ferro','💊 Ferro',fs,s.ferroTime,'FREQ=WEEKLY;COUNT=3','1x por semana, 3 semanas'));
+    out.push('END:VCALENDAR');
+    return out.join('\r\n');
+  }
+  function icsFallback(){
+    const b=$('icsBtn'); b.style.display='block';
+    b.onclick=()=>{ const a=document.createElement('a'); a.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(ics()); a.download='lembretes-remedios.ics'; document.body.appendChild(a); a.click(); a.remove(); };
+  }
+  try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+  (async()=>{
+    try{
+      if(!window.claude||!window.claude.use){ icsFallback(); return; }
+      const dl=await window.claude.use('downloads');
+      if(!dl) return;
+      const b=$('icsBtn'); b.style.display='block';
+      b.onclick=async()=>{ try{ await dl.save({filename:'lembretes-remedios.ics',data:ics()}); }catch(e){ toast('Download cancelado'); } };
+    }catch(e){}
+  })();
+
+  render();
+  // refresh when the day changes / app returns to foreground
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) render(); });
+  setInterval(render,60000);
+})();
+</script>
+</body>
+</html>

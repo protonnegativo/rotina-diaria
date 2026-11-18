@@ -1,0 +1,1 @@
+{"name": "Meus Remédios", "short_name": "Remédios", "start_url": "./", "display": "standalone", "background_color": "#FBF4EE", "theme_color": "#D9467A", "icons": [{"src": "icon.png", "sizes": "512x512", "type": "image/png"}]}
