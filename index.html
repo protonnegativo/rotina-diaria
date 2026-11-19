@@ -32,21 +32,21 @@
   .wrap{max-width:520px;margin:0 auto}
 
   /* hero */
-  .hero{position:relative;overflow:hidden;border-radius:30px;padding:22px 20px 20px;color:#fff;
+  .hero{position:relative;overflow:hidden;border-radius:26px;padding:16px 18px 16px;color:#fff;
     background:radial-gradient(120% 140% at 100% 0%,#FFB38A 0%,transparent 55%),linear-gradient(135deg,#C93A73 0%,#E2557F 45%,#F2876A 100%);
     box-shadow:0 14px 34px rgba(201,58,115,.28)}
   .hero::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-70px;bottom:-110px;background:rgba(255,255,255,.12)}
-  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
-  .greet{font-size:15px;font-weight:700;opacity:.9}
-  h1{font-family:Fraunces,Georgia,serif;font-size:34px;font-weight:600;margin:2px 0 0;line-height:1.05;letter-spacing:-.01em}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;z-index:1}
+  .who{min-width:0;flex:1}
+  .greet{font-size:14px;font-weight:700;opacity:.9}
+  h1{font-family:Fraunces,Georgia,serif;font-size:29px;font-weight:600;margin:1px 0 0;line-height:1.08;letter-spacing:-.01em}
   h1 em{font-style:italic;font-weight:500}
-  .date{font-weight:700;margin-top:6px;opacity:.85;text-transform:capitalize;font-size:14px}
-  .gear{border:0;background:rgba(255,255,255,.22);width:44px;height:44px;border-radius:50%;font-size:20px;color:#fff;cursor:pointer;flex:none;backdrop-filter:blur(6px)}
-  .progress{position:relative;z-index:1;margin-top:20px;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.16);border-radius:20px;padding:12px 14px;backdrop-filter:blur(6px)}
-  .ring{width:58px;height:58px;flex:none}
+  .date{font-weight:700;margin-top:5px;opacity:.88;font-size:13.5px}
+  .prog-txt{font-weight:900;font-size:14.5px;margin-top:3px}
+  .side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none}
+  .gear{border:0;background:rgba(255,255,255,.22);width:34px;height:34px;border-radius:50%;font-size:16px;color:#fff;cursor:pointer;flex:none;backdrop-filter:blur(6px);padding:0}
+  .ring{width:58px;height:58px;flex:none;display:block}
   .ring text{font:900 15px Nunito,sans-serif;fill:#fff}
-  .progress b{font-size:17px;font-weight:900;display:block}
-  .progress span{font-weight:700;font-size:13.5px;opacity:.9}
 
   /* carta */
   .love{margin-top:16px;border-radius:var(--radius);padding:18px 18px 16px;background:var(--paper);box-shadow:var(--shadow);position:relative;overflow:hidden;border:1px solid var(--line)}
@@ -78,7 +78,8 @@
   .pill{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:25px;flex:none}
   .med .info{flex:1;min-width:0}
   .med .name{font-weight:800;font-size:16.5px;line-height:1.2}
-  .med .dose{color:var(--muted);font-weight:700;font-size:13.5px;margin-top:3px}
+  .med .dose{color:var(--muted);font-weight:700;font-size:13.5px;margin-top:4px;line-height:1.5}
+  .tm{display:inline-block;font-weight:800;font-size:12.5px;color:var(--accent);background:var(--accent-soft);padding:1px 8px;border-radius:99px;margin-right:6px}
   .tag{display:inline-block;margin-top:7px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px}
   .tag.late{background:var(--warn-soft);color:var(--warn)}
   .tag.info{background:var(--accent-soft);color:var(--accent)}
@@ -96,6 +97,8 @@
   .dot{width:32px;height:32px;border-radius:12px;margin:7px auto 0;background:var(--line);display:grid;place-items:center;color:#fff;font-size:14px}
   .dot.full{background:var(--ok)} .dot.part{background:var(--warn)} .dot.miss{background:#D9667A}
   .dot.today{outline:2.5px solid var(--accent);outline-offset:2px}
+  .day.pre{opacity:.45}
+  .day.pre .dot{background:transparent;border:1.5px dashed var(--muted)}
   .btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;margin-top:12px}
   .btn.primary{background:linear-gradient(135deg,#D9467A,#F2876A);color:#fff;box-shadow:0 8px 18px rgba(217,70,122,.25)}
   .btn.ghost{background:var(--accent-soft);color:var(--accent)}
@@ -114,6 +117,30 @@
   .grp{margin-top:20px;font-size:12px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.12em}
   .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:99px;font-weight:800;transition:transform .25s;z-index:20;white-space:nowrap}
   .toast.show{transform:translateX(-50%) translateY(0)}
+
+  /* carta flutuante: aparece ao marcar um remédio com a carta fora da tela */
+  .peek{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 14px);max-width:496px;margin:0 auto;z-index:21;border:1px solid var(--line);
+    background:var(--paper);border-radius:22px;padding:12px 16px 12px;box-shadow:0 12px 34px rgba(58,35,64,.28);cursor:pointer;font:inherit;color:inherit;text-align:left;
+    transform:translateY(160%);transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s;visibility:hidden;display:block;width:auto}
+  .peek.show{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+  .peek-h{display:flex;justify-content:space-between;gap:10px;font-weight:800;font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em}
+  .peek-h span{text-transform:none;letter-spacing:0;color:var(--muted);font-size:12.5px}
+  .peek .love-msg{font-size:25px;margin-top:6px}
+  /* comemoração em tela cheia: carta completa */
+  .cele{position:fixed;inset:0;z-index:30;display:none;place-items:center;padding:24px;background:rgba(30,15,30,.55);backdrop-filter:blur(4px);overflow:hidden}
+  .cele.show{display:grid;animation:fadeIn .25s ease-out}
+  @keyframes fadeIn{from{opacity:0}}
+  .cele-card{position:relative;z-index:2;max-width:420px;width:100%;border-radius:28px;padding:26px 22px 20px;text-align:center;background:linear-gradient(135deg,#FFE3EC,#FFF2DC);color:#3A2340;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .6s ease-out}
+  .cele-card .big{font-size:40px;line-height:1}
+  .cele-card h4{margin:8px 0 0;font-family:Fraunces,Georgia,serif;font-size:23px;font-weight:600}
+  .cele-card .love-msg{font-size:33px;margin-top:12px;color:#3A2340}
+  .cele-card .w.key.show{color:#D9467A}
+  .cele-card small{display:block;margin-top:14px;font-weight:700;font-size:13px;color:#9A8798}
+  body.princess .cele-card{background:linear-gradient(135deg,#F6E3FB,#FFF1CF);border:2px solid #E9C46A}
+  body.princess .cele-card .w.key.show{color:#A84BC4}
+  .heart.fx{position:fixed;bottom:-40px;font-size:30px;z-index:1;animation:floatBig 2.6s ease-out forwards}
+  @keyframes floatBig{0%{opacity:1;transform:translateY(0) scale(.6) rotate(0)}100%{opacity:0;transform:translateY(-95vh) scale(1.4) rotate(18deg)}}
+  @media (prefers-reduced-motion: reduce){.heart.fx,.w.pop,.cele-card{animation-duration:.01s}}
 
   /* ===== tema princesa (dias especiais) ===== */
   body.princess{--bg:#FAF0FA;--accent:#A84BC4;--accent-soft:#F2E2F8;--ok:#C9962B;--ok-soft:#FFF4D9;--paper:#FFF8FC;--line:#EEDCF0;
@@ -139,22 +166,22 @@
 <div class="wrap">
   <section class="hero">
     <div class="hero-top">
-      <div>
+      <div class="who">
         <div class="greet" id="greet">Bom dia,</div>
         <h1 id="hello"><em>Jackeline</em></h1>
         <div class="date" id="today"></div>
+        <div class="prog-txt" id="progTxt">—</div>
       </div>
-      <button class="gear" id="openSettings" aria-label="Ajustes">⚙️</button>
-    </div>
-    <div class="progress">
-      <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="6"/><circle id="ringFg" cx="29" cy="29" r="24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="150.8" style="transition:stroke-dashoffset .5s"/><text id="ringTxt" x="29" y="34" text-anchor="middle">0</text></svg>
-      <div><b id="progTxt">—</b><span id="progSub">Toque no remédio quando tomar</span></div>
+      <div class="side">
+        <button class="gear" id="openSettings" aria-label="Ajustes">⚙️</button>
+        <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="6"/><circle id="ringFg" cx="29" cy="29" r="24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="150.8" style="transition:stroke-dashoffset .5s"/><text id="ringTxt" x="29" y="34" text-anchor="middle">0</text></svg>
+      </div>
     </div>
   </section>
 
   <div class="banner">👑 Hoje o dia é todo seu, alteza 👑</div>
   <div class="love" id="love">
-    <div class="love-h">💌 Carta do dia <small id="loveCount"></small></div>
+    <div class="love-h">💌 Carta do dia </div>
     <div class="love-msg" id="loveMsg"></div>
     <div class="love-foot" id="loveFoot"></div>
   </div>
@@ -204,6 +231,18 @@
   <p class="hint" style="margin-top:16px">Os registros ficam guardados neste iPhone. Dúvida sobre horário ou como tomar? Confirme com o médico ou farmacêutico.</p>
 </div>
 <div class="toast" id="toast"></div>
+<button class="peek" id="peek" aria-live="polite">
+  <div class="peek-h"><b id="peekT">💌 Carta do dia</b><span id="peekS"></span></div>
+  <div class="love-msg" id="peekMsg"></div>
+</button>
+<div class="cele" id="cele" role="dialog" aria-label="Carta completa">
+  <div class="cele-card">
+    <div class="big" id="celeIcon">💌</div>
+    <h4 id="celeT">Tudo tomado hoje!</h4>
+    <div class="love-msg" id="celeMsg"></div>
+    <small>Toque para fechar</small>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -217,7 +256,7 @@
   const todayDate=()=>{const n=now();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
 
   const DEFAULTS={name:'Jackeline',morning:'08:00',lunch:'12:30',folinBox:30,weekDay:0,weekTime:'09:00',
-    ferroStart:keyOf(addDays(todayDate(),1)),ferroTime:'10:00',installed:keyOf(todayDate())};
+    ferroStart:'2026-11-19',ferroTime:'15:00',installed:keyOf(todayDate())};
   // ferro sempre cai na quinta: a data escolhida anda para a quinta seguinte (ou a própria, se já for quinta)
   const ferroStartDate=()=>{const d=parseKey(S().ferroStart); return addDays(d,(4-d.getDay()+7)%7);};
 
@@ -232,6 +271,8 @@
   let state=load();
   state.settings={...DEFAULTS,...state.settings};
   state.log=state.log||{};
+  // ajuste único: o ferro começa na quinta 19/11/2026, à tarde (corrige aparelhos já instalados)
+  if(!state.settings.ferroFix1){ state.settings.ferroStart='2026-11-19'; state.settings.ferroTime='15:00'; state.settings.ferroFix1=1; save(); }
 
   // ---------- medicine logic ----------
   const S=()=>state.settings;
@@ -294,24 +335,24 @@
       $('greet').textContent=(hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite')+(s.name?',':' 💗');
       $('hello').innerHTML=s.name?'<em>'+esc(s.name)+'</em> '+(hr<18?'☀️':'🌙'):'';
     }
-    $('today').textContent=day.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+    const ds=day.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+    $('today').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
     const {items,doneThisWeek}=itemsFor(day);
     const done=items.filter(i=>state.log[i.key]).length;
     $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
-    $('progSub').textContent=done===items.length?(pr?'A coroa é sua hoje ✨':'Arrasou, até amanhã 💚'):(pr?'Toque no remédio quando tomar, princesa':'Toque no remédio quando tomar');
     $('ringFg').setAttribute('stroke-dashoffset',150.8*(1-(items.length?done/items.length:1)));
     $('ringTxt').textContent=done===items.length?'✓':done+'/'+items.length; $('ringTxt').style.fontSize=done===items.length?'26px':'15px'; $('ringTxt').setAttribute('y',done===items.length?'38':'34');
 
     const groups={};
-    items.forEach(i=>{(groups[i.time]=groups[i.time]||[]).push(i)});
+    items.forEach(i=>{const g=slotName(i.time);(groups[g]=groups[g]||[]).push(i)});
     let html='';
-    Object.keys(groups).sort().forEach(t=>{
-      html+='<div class="slot"><div class="slot-h"><h2>'+slotName(t)+'</h2><span class="t">'+t+'</span></div>';
-      groups[t].forEach(i=>{
+    ['Manhã','Tarde','Noite'].filter(g=>groups[g]).forEach(g=>{
+      html+='<div class="slot"><div class="slot-h"><h2>'+g+'</h2></div>';
+      groups[g].forEach(i=>{
         const taken=state.log[i.key];
         html+='<button class="med'+(taken?' done':'')+'" data-key="'+i.key+'">'+
           '<div class="pill" style="background:'+(TINT[i.id]||'#D9467A')+'24">'+i.icon+'</div><div class="info"><div class="name">'+i.name+'</div>'+
-          '<div class="dose">'+i.dose+(taken?' · tomado às '+taken:'')+'</div>'+
+          '<div class="dose"><span class="tm">'+i.time+'</span>'+i.dose+(taken?' · tomado às '+taken:'')+'</div>'+
           (i.tag&&!taken?'<span class="tag '+i.tag.cls+'">'+i.tag.txt+'</span>':'')+
           (i.tag&&taken&&i.tag.cls==='info'?'<span class="tag info">'+i.tag.txt+'</span>':'')+
           '</div><div class="check">'+(taken?'✓':'')+'</div></button>';
@@ -333,7 +374,8 @@
       let cls='', mark='';
       if(i===0){cls=n===2?'full':n===1?'part':''; mark=n===2?'✓':'';}
       else if(!before){cls=n===2?'full':n===1?'part':'miss'; mark=n===2?'✓':n===0?'·':'';}
-      w+='<div class="day">'+DAYS[d.getDay()].slice(0,3)+'<div class="dot '+cls+(i===0?' today':'')+'">'+mark+'</div></div>';
+      const pre=before&&i!==0;
+      w+='<div class="day'+(pre?' pre':'')+'">'+DAYS[d.getDay()].slice(0,3)+'<div class="dot '+cls+(i===0?' today':'')+'">'+mark+'</div></div>';
     }
     $('week').innerHTML=w;
 
@@ -465,11 +507,10 @@
       return '<span class="w'+(w.key?' key':'')+(vis?' show':' hid')+(isNew?' pop':'')+'">'+esc(w.txt)+'</span>';
     }).join(' ');
     const left=total-done;
-    $('loveCount').textContent=done+'/'+total;
     $('loveFoot').textContent=complete?'Mensagem completa 💗 Até amanhã!':
       (done===0?'Cada remédio tomado revela um pedacinho…':'Falta'+(left>1?'m ':' ')+left+' pra descobrir a palavra secreta ✨');
     $('love').classList.toggle('complete',complete);
-    if(complete&&!lastLove.complete) hearts();
+    if(complete&&!lastLove.complete){ hearts(); justCompleted=true; }
     lastLove.shown=show; lastLove.complete=complete;
   }
   function hearts(){
@@ -479,10 +520,47 @@
       box.appendChild(h);setTimeout(()=>h.remove(),2600);}
   }
 
+  // a carta está visível na tela agora?
+  let justCompleted=false;
+  function loveVisible(){const r=$('love').getBoundingClientRect(); return r.bottom>90 && r.top<innerHeight-90;}
+  let pt; function hidePeek(){clearTimeout(pt);$('peek').classList.remove('show');}
+  function showPeek(left){
+    const pr=isPrincess();
+    $('toast').classList.remove('show');
+    $('peekT').textContent=pr?'👑 Carta real do dia':'💌 Carta do dia';
+    $('peekS').textContent=(pr?'Anotado, alteza! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
+    $('peekMsg').innerHTML=$('loveMsg').innerHTML;
+    $('peek').classList.add('show'); clearTimeout(pt); pt=setTimeout(hidePeek,3600);
+  }
+  let ct; function hideCele(){clearTimeout(ct);$('cele').classList.remove('show');$('cele').querySelectorAll('.heart').forEach(h=>h.remove());}
+  function showCele(){
+    const pr=isPrincess(), c=$('cele');
+    hidePeek(); $('toast').classList.remove('show');
+    $('celeIcon').textContent=pr?'👑':'💌';
+    $('celeT').textContent=pr?'Tudo tomado, alteza!':'Tudo tomado hoje!';
+    $('celeMsg').innerHTML=$('loveMsg').innerHTML;
+    c.classList.add('show');
+    const set=pr?['👑','💖','✨','🌸']:['💗','💖','✨','💕'];
+    for(let i=0;i<22;i++){const h=document.createElement('span');h.className='heart fx';h.textContent=set[i%4];
+      h.style.left=(4+Math.random()*90)+'%';h.style.animationDelay=(Math.random()*1.4)+'s';c.appendChild(h);}
+    clearTimeout(ct); ct=setTimeout(hideCele,7000);
+  }
+  $('peek').onclick=()=>{hidePeek();window.scrollTo({top:0,behavior:'smooth'});};
+  $('cele').onclick=hideCele;
+
   function toggle(k){
-    if(state.log[k]){ delete state.log[k]; toast('Desmarcado'); }
-    else{ const n=now(); state.log[k]=pad(n.getHours())+':'+pad(n.getMinutes()); toast(isPrincess()?'Anotado, alteza! 👑':'Anotado! 💚'); if(navigator.vibrate) try{navigator.vibrate(15)}catch(e){} }
+    const marking=!state.log[k];
+    if(!marking){ delete state.log[k]; hidePeek(); toast('Desmarcado'); }
+    else{ const n=now(); state.log[k]=pad(n.getHours())+':'+pad(n.getMinutes()); if(navigator.vibrate) try{navigator.vibrate(15)}catch(e){} }
+    justCompleted=false;
     save(); render();
+    if(!marking) return;
+    // com a carta fora da tela, o efeito vai até ela: carta flutuante a cada remédio, comemoração em tela cheia no último
+    if(justCompleted && !loveVisible()) showCele();
+    else if(!justCompleted && !loveVisible()){
+      const it=itemsFor(todayDate()).items; showPeek(it.filter(i=>!state.log[i.key]).length);
+    }
+    else toast(isPrincess()?'Anotado, alteza! 👑':'Anotado! 💚');
   }
 
   let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1400);}
