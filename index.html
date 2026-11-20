@@ -159,6 +159,27 @@
   body.princess .med.done{border-color:transparent}
   body.princess .btn.primary{background:linear-gradient(135deg,#8E44C8,#E07AB5)}
   body.princess .banner{display:block}
+  /* ===== tema zumbi ===== */
+  body.zombie{--bg:#EEF3E4;--accent:#4F7F22;--accent-soft:#DCEBC6;--ok:#7A4FB0;--ok-soft:#EBE2F6;--paper:#F7FAEE;--line:#D9E4C8;
+    background:radial-gradient(circle at 14% 22%,rgba(122,79,176,.18) 0 3px,transparent 4px),radial-gradient(circle at 80% 48%,rgba(79,127,34,.22) 0 3px,transparent 4px),radial-gradient(circle at 42% 80%,rgba(122,79,176,.15) 0 2px,transparent 3px),var(--bg);background-size:150px 150px,190px 190px,170px 170px,auto}
+  @media (prefers-color-scheme: dark){body.zombie{--bg:#131A11;--card:#1C2618;--ink:#EAF3E0;--muted:#9DAE90;--accent:#9BD45A;--accent-soft:#263A1C;--ok:#B38AE8;--ok-soft:#2B2140;--paper:#1D2619;--line:#2F3D28}}
+  body.zombie .hero{background:radial-gradient(120% 140% at 100% 0%,#B9E36A 0%,transparent 50%),linear-gradient(135deg,#2F5A17 0%,#5E9A30 50%,#7B55B5 100%);box-shadow:0 14px 34px rgba(47,90,23,.35);border:2px solid rgba(185,227,106,.7)}
+  body.zombie .hero::before{content:"🧟  🧠   🧟    🧠";position:absolute;top:8px;left:44%;font-size:13px;letter-spacing:4px;white-space:nowrap;opacity:.8;animation:twinkle 2.6s ease-in-out infinite}
+  body.zombie .love{border:2px dashed #7FB04A}
+  body.zombie .love::before{background:repeating-linear-gradient(transparent 0 33px,rgba(79,127,34,.1) 33px 34px)}
+  body.zombie .w.hid{background:linear-gradient(90deg,rgba(79,127,34,.18),rgba(79,127,34,.34),rgba(79,127,34,.18));background-size:200% 100%}
+  body.zombie .w.key.hid{background:linear-gradient(90deg,rgba(122,79,176,.3),rgba(122,79,176,.55),rgba(122,79,176,.3));background-size:200% 100%}
+  body.zombie .slot-h h2,body.zombie .sec-title{color:var(--accent)}
+  body.zombie .slot-h h2::after,body.zombie .sec-title::after{content:" 🧟";font-size:15px}
+  body.zombie .med{border:1.5px solid rgba(127,176,74,.45)}
+  body.zombie .med.done{border-color:transparent}
+  body.zombie .btn.primary{background:linear-gradient(135deg,#4F7F22,#7B55B5)}
+  body.zombie .banner{display:block}
+  body.zombie .love.complete,body.zombie .cele-card{background:linear-gradient(135deg,#E2F1CB,#ECE1F8);color:#22301A}
+  body.zombie .cele-card{border:2px dashed #7FB04A}
+  body.zombie .cele-card .love-msg{color:#22301A}
+  body.zombie .cele-card .w.key.show{color:#6A3FA8}
+  @media (prefers-color-scheme: dark){body.zombie .love.complete{background:linear-gradient(135deg,#27391C,#2E2342);color:var(--ink)}}
   .banner{display:none;text-align:center;margin:14px 0 0;font-family:Caveat,cursive;font-size:24px;font-weight:700;color:var(--accent)}
 </style>
 </head>
@@ -179,7 +200,7 @@
     </div>
   </section>
 
-  <div class="banner">👑 Hoje o dia é todo seu, alteza 👑</div>
+  <div class="banner" id="banner">👑 Hoje o dia é todo seu, alteza 👑</div>
   <div class="love" id="love">
     <div class="love-h">💌 Carta do dia </div>
     <div class="love-msg" id="loveMsg"></div>
@@ -322,8 +343,9 @@
 
   function render(){
     const day=todayDate(), s=S();
-    const pr=isPrincess(); document.body.classList.toggle('princess',pr);
-    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':'💌 Carta do dia ';
+    const pr=isPrincess(), zb=isZombie(); document.body.classList.toggle('princess',pr); document.body.classList.toggle('zombie',zb);
+    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':'💌 Carta do dia ';
+    $('banner').textContent=zb?'🧟 Hoje eu tô com fome de você 🧠':'👑 Hoje o dia é todo seu, alteza 👑';
     const hr=now().getHours();
     const cu=CUSTOM[keyOf(day)];
     const pre=itemsFor(day).items, allDone=pre.length>0&&pre.every(i=>state.log[i.key]);
@@ -339,7 +361,7 @@
     $('today').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
     const {items,doneThisWeek}=itemsFor(day);
     const done=items.filter(i=>state.log[i.key]).length;
-    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
+    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':zb?'Tudo tomado! Cérebro salvo 🧠':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
     $('ringFg').setAttribute('stroke-dashoffset',150.8*(1-(items.length?done/items.length:1)));
     $('ringTxt').textContent=done===items.length?'✓':done+'/'+items.length; $('ringTxt').style.fontSize=done===items.length?'26px':'15px'; $('ringTxt').setAttribute('y',done===items.length?'38':'34');
 
@@ -472,10 +494,15 @@
   // mensagens com data marcada (têm prioridade sobre a lista automática)
   const CUSTOM={
     // name: o que aparece no lugar do nome (escondido até tomar tudo)
-    '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'}
+    '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'},
+    '2026-11-20':'Toma tudo direitinho, senão hoje eu vou te [morder] 🧟'
   };
   const PRINCESS_DAYS=['2026-11-18'];
   const isPrincess=()=>PRINCESS_DAYS.includes(keyOf(todayDate()));
+  const ZOMBIE_DAYS=['2026-11-20'];
+  const isZombie=()=>ZOMBIE_DAYS.includes(keyOf(todayDate()));
+  // emojis que sobem na comemoração, conforme o tema do dia
+  const fxSet=()=>isPrincess()?['👑','💖','✨','🌸']:isZombie()?['🧟','🧠','💚','💜']:['💗','💖','✨','💕'];
   function messageFor(day){
     const dk=keyOf(day);
     if(CUSTOM[dk]) return typeof CUSTOM[dk]==='string'?CUSTOM[dk]:CUSTOM[dk].text;
@@ -515,7 +542,7 @@
   }
   function hearts(){
     const box=$('love');
-    for(let i=0;i<12;i++){const h=document.createElement('span');h.className='heart';h.textContent=(isPrincess()?['👑','💖','✨','🌸']:['💗','💖','✨','💕'])[i%4];
+    for(let i=0;i<12;i++){const h=document.createElement('span');h.className='heart';h.textContent=fxSet()[i%4];
       h.style.left=(8+Math.random()*84)+'%';h.style.bottom='0';h.style.animationDelay=(Math.random()*.6)+'s';
       box.appendChild(h);setTimeout(()=>h.remove(),2600);}
   }
@@ -527,8 +554,9 @@
   function showPeek(left){
     const pr=isPrincess();
     $('toast').classList.remove('show');
-    $('peekT').textContent=pr?'👑 Carta real do dia':'💌 Carta do dia';
-    $('peekS').textContent=(pr?'Anotado, alteza! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
+    const zb=isZombie();
+    $('peekT').textContent=pr?'👑 Carta real do dia':zb?'🧟 Carta do além':'💌 Carta do dia';
+    $('peekS').textContent=(pr?'Anotado, alteza! ':zb?'Nhac! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
     $('peekMsg').innerHTML=$('loveMsg').innerHTML;
     $('peek').classList.add('show'); clearTimeout(pt); pt=setTimeout(hidePeek,3600);
   }
@@ -536,11 +564,12 @@
   function showCele(){
     const pr=isPrincess(), c=$('cele');
     hidePeek(); $('toast').classList.remove('show');
-    $('celeIcon').textContent=pr?'👑':'💌';
-    $('celeT').textContent=pr?'Tudo tomado, alteza!':'Tudo tomado hoje!';
+    const zb=isZombie();
+    $('celeIcon').textContent=pr?'👑':zb?'🧟':'💌';
+    $('celeT').textContent=pr?'Tudo tomado, alteza!':zb?'Tudo tomado! Cérebro salvo':'Tudo tomado hoje!';
     $('celeMsg').innerHTML=$('loveMsg').innerHTML;
     c.classList.add('show');
-    const set=pr?['👑','💖','✨','🌸']:['💗','💖','✨','💕'];
+    const set=fxSet();
     for(let i=0;i<22;i++){const h=document.createElement('span');h.className='heart fx';h.textContent=set[i%4];
       h.style.left=(4+Math.random()*90)+'%';h.style.animationDelay=(Math.random()*1.4)+'s';c.appendChild(h);}
     clearTimeout(ct); ct=setTimeout(hideCele,7000);
@@ -560,7 +589,7 @@
     else if(!justCompleted && !loveVisible()){
       const it=itemsFor(todayDate()).items; showPeek(it.filter(i=>!state.log[i.key]).length);
     }
-    else toast(isPrincess()?'Anotado, alteza! 👑':'Anotado! 💚');
+    else toast(isPrincess()?'Anotado, alteza! 👑':isZombie()?'Nhac! Anotado 🧟':'Anotado! 💚');
   }
 
   let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1400);}
