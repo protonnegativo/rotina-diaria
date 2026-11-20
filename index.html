@@ -180,6 +180,28 @@
   body.zombie .cele-card .love-msg{color:#22301A}
   body.zombie .cele-card .w.key.show{color:#6A3FA8}
   @media (prefers-color-scheme: dark){body.zombie .love.complete{background:linear-gradient(135deg,#27391C,#2E2342);color:var(--ink)}}
+  /* ===== tema black friday (sempre escuro) ===== */
+  body.bf{--bg:#121212;--card:#1E1E1E;--ink:#F6F1E4;--muted:#A9A396;--line:#34322C;--accent:#F5C518;--accent-soft:#3A3212;--ok:#E5484D;--ok-soft:#3A1B1D;--paper:#1A1A1A;--shadow:0 8px 24px rgba(0,0,0,.45);
+    background:repeating-linear-gradient(135deg,rgba(245,197,24,.05) 0 14px,transparent 14px 28px),var(--bg)}
+  body.bf .hero{background:radial-gradient(120% 140% at 100% 0%,rgba(245,197,24,.55) 0%,transparent 50%),linear-gradient(135deg,#0B0B0B 0%,#262626 60%,#3B1215 100%);box-shadow:0 14px 34px rgba(0,0,0,.5);border:2px solid #F5C518}
+  body.bf .hero::before{content:"% OFF  ·  % OFF";position:absolute;top:9px;left:40%;color:rgba(245,197,24,.75);font-size:11px;font-weight:900;letter-spacing:3px;white-space:nowrap;animation:twinkle 2.6s ease-in-out infinite}
+  body.bf h1 em{color:#F5C518}
+  body.bf .love{border:2px dashed #F5C518}
+  body.bf .love::before{background:repeating-linear-gradient(transparent 0 33px,rgba(245,197,24,.09) 33px 34px)}
+  body.bf .w.hid{background:linear-gradient(90deg,rgba(245,197,24,.18),rgba(245,197,24,.36),rgba(245,197,24,.18));background-size:200% 100%}
+  body.bf .w.key.hid{background:linear-gradient(90deg,rgba(229,72,77,.4),rgba(229,72,77,.75),rgba(229,72,77,.4));background-size:200% 100%}
+  body.bf .w.key.show{color:#F5C518}
+  body.bf .slot-h h2,body.bf .sec-title{color:var(--accent)}
+  body.bf .slot-h h2::after,body.bf .sec-title::after{content:" 🏷️";font-size:15px}
+  body.bf .med{border:1.5px solid rgba(245,197,24,.35)}
+  body.bf .med.done{border-color:transparent}
+  body.bf .btn.primary{background:linear-gradient(135deg,#F5C518,#E5484D);color:#121212}
+  body.bf .banner{display:block}
+  body.bf .love.complete,body.bf .cele-card{background:linear-gradient(135deg,#1F1B0C,#2B1415);color:#F6F1E4}
+  body.bf .cele-card{border:2px solid #F5C518}
+  body.bf .cele-card .love-msg{color:#F6F1E4}
+  body.bf .cele-card .w.key.show{color:#F5C518}
+  body.bf .cele-card small{color:#A9A396}
   .banner{display:none;text-align:center;margin:14px 0 0;font-family:Caveat,cursive;font-size:24px;font-weight:700;color:var(--accent)}
 </style>
 </head>
@@ -343,9 +365,9 @@
 
   function render(){
     const day=todayDate(), s=S();
-    const pr=isPrincess(), zb=isZombie(); document.body.classList.toggle('princess',pr); document.body.classList.toggle('zombie',zb);
-    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':'💌 Carta do dia ';
-    $('banner').textContent=zb?'🧟 Hoje é Dia do Zumbi 🧠':'👑 Hoje o dia é todo seu, alteza 👑';
+    const pr=isPrincess(), zb=isZombie(), bf=isBF(); document.body.classList.toggle('princess',pr); document.body.classList.toggle('zombie',zb); document.body.classList.toggle('bf',bf);
+    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':bf?'🏷️ Oferta do dia ':'💌 Carta do dia ';
+    $('banner').textContent=zb?'🧟 Hoje é Dia do Zumbi 🧠':bf?'🏷️ Black Friday de beijos 💋':'👑 Hoje o dia é todo seu, alteza 👑';
     const hr=now().getHours();
     const cu=CUSTOM[keyOf(day)];
     const pre=itemsFor(day).items, allDone=pre.length>0&&pre.every(i=>state.log[i.key]);
@@ -361,7 +383,7 @@
     $('today').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
     const {items,doneThisWeek}=itemsFor(day);
     const done=items.filter(i=>state.log[i.key]).length;
-    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':zb?'Tudo tomado! Cérebro salvo 🧠':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
+    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':zb?'Tudo tomado! Cérebro salvo 🧠':bf?'Tudo tomado! Oferta liberada 💋':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
     $('ringFg').setAttribute('stroke-dashoffset',150.8*(1-(items.length?done/items.length:1)));
     $('ringTxt').textContent=done===items.length?'✓':done+'/'+items.length; $('ringTxt').style.fontSize=done===items.length?'26px':'15px'; $('ringTxt').setAttribute('y',done===items.length?'38':'34');
 
@@ -495,14 +517,17 @@
   const CUSTOM={
     // name: o que aparece no lugar do nome (escondido até tomar tudo)
     '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'},
-    '2026-11-20':'Fui mordido de amor por você. Agora é minha vez de te [morder] 🧟'
+    '2026-11-20':'Fui mordido de amor por você. Agora é minha vez de te [morder] 🧟',
+    '2026-11-27':'Black Friday: beijos com 200% de [desconto]. Cada beijo que você dá, ganha 1 de volta 💋'
   };
+  const BF_DAYS=['2026-11-27'];
+  const isBF=()=>BF_DAYS.includes(keyOf(todayDate()));
   const PRINCESS_DAYS=['2026-11-18'];
   const isPrincess=()=>PRINCESS_DAYS.includes(keyOf(todayDate()));
   const ZOMBIE_DAYS=['2026-11-20'];
   const isZombie=()=>ZOMBIE_DAYS.includes(keyOf(todayDate()));
   // emojis que sobem na comemoração, conforme o tema do dia
-  const fxSet=()=>isPrincess()?['👑','💖','✨','🌸']:isZombie()?['🧟','🧠','💚','💜']:['💗','💖','✨','💕'];
+  const fxSet=()=>isPrincess()?['👑','💖','✨','🌸']:isZombie()?['🧟','🧠','💚','💜']:isBF()?['💋','🏷️','💛','🖤']:['💗','💖','✨','💕'];
   function messageFor(day){
     const dk=keyOf(day);
     if(CUSTOM[dk]) return typeof CUSTOM[dk]==='string'?CUSTOM[dk]:CUSTOM[dk].text;
@@ -555,8 +580,9 @@
     const pr=isPrincess();
     $('toast').classList.remove('show');
     const zb=isZombie();
-    $('peekT').textContent=pr?'👑 Carta real do dia':zb?'🧟 Carta do além':'💌 Carta do dia';
-    $('peekS').textContent=(pr?'Anotado, alteza! ':zb?'Nhac! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
+    const bf=isBF();
+    $('peekT').textContent=pr?'👑 Carta real do dia':zb?'🧟 Carta do além':bf?'🏷️ Oferta do dia':'💌 Carta do dia';
+    $('peekS').textContent=(pr?'Anotado, alteza! ':zb?'Nhac! ':bf?'Vendido! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
     $('peekMsg').innerHTML=$('loveMsg').innerHTML;
     $('peek').classList.add('show'); clearTimeout(pt); pt=setTimeout(hidePeek,3600);
   }
@@ -565,8 +591,9 @@
     const pr=isPrincess(), c=$('cele');
     hidePeek(); $('toast').classList.remove('show');
     const zb=isZombie();
-    $('celeIcon').textContent=pr?'👑':zb?'🧟':'💌';
-    $('celeT').textContent=pr?'Tudo tomado, alteza!':zb?'Tudo tomado! Cérebro salvo':'Tudo tomado hoje!';
+    const bf=isBF();
+    $('celeIcon').textContent=pr?'👑':zb?'🧟':bf?'💋':'💌';
+    $('celeT').textContent=pr?'Tudo tomado, alteza!':zb?'Tudo tomado! Cérebro salvo':bf?'Tudo tomado! Oferta liberada':'Tudo tomado hoje!';
     $('celeMsg').innerHTML=$('loveMsg').innerHTML;
     c.classList.add('show');
     const set=fxSet();
@@ -589,7 +616,7 @@
     else if(!justCompleted && !loveVisible()){
       const it=itemsFor(todayDate()).items; showPeek(it.filter(i=>!state.log[i.key]).length);
     }
-    else toast(isPrincess()?'Anotado, alteza! 👑':isZombie()?'Nhac! Anotado 🧟':'Anotado! 💚');
+    else toast(isPrincess()?'Anotado, alteza! 👑':isZombie()?'Nhac! Anotado 🧟':isBF()?'Vendido! 💋':'Anotado! 💚');
   }
 
   let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1400);}
