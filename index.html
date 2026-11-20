@@ -612,7 +612,7 @@
     save(); render();
     if(!marking) return;
     // com a carta fora da tela, o efeito vai até ela: carta flutuante a cada remédio, comemoração em tela cheia no último
-    if(justCompleted && !loveVisible()) showCele();
+    if(justCompleted) showCele();
     else if(!justCompleted && !loveVisible()){
       const it=itemsFor(todayDate()).items; showPeek(it.filter(i=>!state.log[i.key]).length);
     }
