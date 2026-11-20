@@ -345,7 +345,7 @@
     const day=todayDate(), s=S();
     const pr=isPrincess(), zb=isZombie(); document.body.classList.toggle('princess',pr); document.body.classList.toggle('zombie',zb);
     document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':'💌 Carta do dia ';
-    $('banner').textContent=zb?'🧟 Hoje eu tô com fome de você 🧠':'👑 Hoje o dia é todo seu, alteza 👑';
+    $('banner').textContent=zb?'🧟 Hoje é Dia do Zumbi 🧠':'👑 Hoje o dia é todo seu, alteza 👑';
     const hr=now().getHours();
     const cu=CUSTOM[keyOf(day)];
     const pre=itemsFor(day).items, allDone=pre.length>0&&pre.every(i=>state.log[i.key]);
@@ -495,7 +495,7 @@
   const CUSTOM={
     // name: o que aparece no lugar do nome (escondido até tomar tudo)
     '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'},
-    '2026-11-20':'Toma tudo direitinho, senão hoje eu vou te [morder] 🧟'
+    '2026-11-20':'Fui mordido de amor por você. Agora é minha vez de te [morder] 🧟'
   };
   const PRINCESS_DAYS=['2026-11-18'];
   const isPrincess=()=>PRINCESS_DAYS.includes(keyOf(todayDate()));
