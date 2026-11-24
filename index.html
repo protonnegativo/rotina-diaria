@@ -202,6 +202,26 @@
   body.bf .cele-card .love-msg{color:#F6F1E4}
   body.bf .cele-card .w.key.show{color:#F5C518}
   body.bf .cele-card small{color:#A9A396}
+  /* ===== tema viagem / saudade ===== */
+  body.away{--bg:#EDF3FA;--accent:#2F6FBF;--accent-soft:#DAE7F7;--paper:#F8FBFF;--line:#D6E2F0;
+    background:radial-gradient(circle at 16% 20%,rgba(47,111,191,.16) 0 2px,transparent 3px),radial-gradient(circle at 78% 44%,rgba(242,166,107,.25) 0 2px,transparent 3px),radial-gradient(circle at 40% 78%,rgba(47,111,191,.14) 0 2px,transparent 3px),var(--bg);background-size:150px 150px,190px 190px,170px 170px,auto}
+  @media (prefers-color-scheme: dark){body.away{--bg:#0F1722;--card:#18222E;--ink:#EAF1F8;--muted:#93A4B6;--accent:#7FB4F0;--accent-soft:#1D3150;--paper:#16202C;--line:#29394C}}
+  body.away .hero{background:radial-gradient(120% 140% at 100% 0%,#FFC38F 0%,transparent 52%),linear-gradient(135deg,#173E73 0%,#3A7FCB 55%,#F0A06A 100%);box-shadow:0 14px 34px rgba(23,62,115,.35);border:2px solid rgba(255,214,170,.7)}
+  body.away .hero::before{content:"✈️  ·  ·  ·  ·  💌";position:absolute;top:9px;left:40%;font-size:12px;letter-spacing:3px;white-space:nowrap;color:rgba(255,255,255,.8);animation:twinkle 2.6s ease-in-out infinite}
+  body.away .love{border:2px dashed #7FB0E6}
+  body.away .love::before{background:repeating-linear-gradient(transparent 0 33px,rgba(47,111,191,.09) 33px 34px)}
+  body.away .w.hid{background:linear-gradient(90deg,rgba(47,111,191,.16),rgba(47,111,191,.32),rgba(47,111,191,.16));background-size:200% 100%}
+  body.away .slot-h h2,body.away .sec-title{color:var(--accent)}
+  body.away .slot-h h2::after,body.away .sec-title::after{content:" ✈️";font-size:14px}
+  body.away .med{border:1.5px solid rgba(127,176,230,.45)}
+  body.away .med.done{border-color:transparent}
+  body.away .btn.primary{background:linear-gradient(135deg,#2F6FBF,#F0A06A)}
+  body.away .banner{display:block}
+  body.away .love.complete,body.away .cele-card{background:linear-gradient(135deg,#DDEBFA,#FFE9D6);color:#1B2B40}
+  body.away .cele-card{border:2px dashed #7FB0E6}
+  body.away .cele-card .love-msg{color:#1B2B40}
+  body.away .cele-card .w.key.show{color:#2F6FBF}
+  @media (prefers-color-scheme: dark){body.away .love.complete{background:linear-gradient(135deg,#1B2E48,#3A2A1E);color:var(--ink)}}
   .banner{display:none;text-align:center;margin:14px 0 0;font-family:Caveat,cursive;font-size:24px;font-weight:700;color:var(--accent)}
 </style>
 </head>
@@ -366,8 +386,9 @@
   function render(){
     const day=todayDate(), s=S();
     const pr=isPrincess(), zb=isZombie(), bf=isBF(); document.body.classList.toggle('princess',pr); document.body.classList.toggle('zombie',zb); document.body.classList.toggle('bf',bf);
-    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':bf?'🏷️ Oferta do dia ':'💌 Carta do dia ';
-    $('banner').textContent=zb?'🧟 Hoje é Dia do Zumbi 🧠':bf?'🏷️ Black Friday de beijos 💋':'👑 Hoje o dia é todo seu, alteza 👑';
+    const aw=isAway(); document.body.classList.toggle('away',aw);
+    document.querySelector('.love-h').firstChild.textContent=pr?'👑 Carta real do dia ':zb?'🧟 Carta do além ':bf?'🏷️ Oferta do dia ':aw?'✈️ Carta de BH ':'💌 Carta do dia ';
+    $('banner').textContent=zb?'🧟 Hoje é Dia do Zumbi 🧠':bf?'🏷️ Black Friday de beijos 💋':aw?'✈️ Longe só no mapa 💙':'👑 Hoje o dia é todo seu, alteza 👑';
     const hr=now().getHours();
     const cu=CUSTOM[keyOf(day)];
     const pre=itemsFor(day).items, allDone=pre.length>0&&pre.every(i=>state.log[i.key]);
@@ -383,7 +404,7 @@
     $('today').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
     const {items,doneThisWeek}=itemsFor(day);
     const done=items.filter(i=>state.log[i.key]).length;
-    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':zb?'Tudo tomado! Cérebro salvo 🧠':bf?'Tudo tomado! Oferta liberada 💋':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
+    $('progTxt').textContent=done===items.length?(pr?'Tudo tomado, alteza! 👑':zb?'Tudo tomado! Cérebro salvo 🧠':bf?'Tudo tomado! Oferta liberada 💋':aw?'Tudo tomado! Orgulho daqui de BH 💙':'Tudo tomado hoje! 🎉'):done+' de '+items.length+' tomados';
     $('ringFg').setAttribute('stroke-dashoffset',150.8*(1-(items.length?done/items.length:1)));
     $('ringTxt').textContent=done===items.length?'✓':done+'/'+items.length; $('ringTxt').style.fontSize=done===items.length?'26px':'15px'; $('ringTxt').setAttribute('y',done===items.length?'38':'34');
 
@@ -518,8 +539,12 @@
     // name: o que aparece no lugar do nome (escondido até tomar tudo)
     '2026-11-18':{text:'Hoje é seu dia, dia da [princesa] 💗',name:'princesa',greet:'Oi,'},
     '2026-11-20':'Fui mordido de amor por você. Agora é minha vez de te [morder] 🧟',
-    '2026-11-27':'Black Friday: beijos com 200% de [desconto]. Cada beijo que você dá, ganha 1 de volta 💋'
+    '2026-11-27':'Black Friday: beijos com 200% de [desconto]. Cada beijo que você dá, ganha 1 de volta 💋',
+    '2026-11-28':'Tô em BH, mas meu coração ficou aí com [você] ✈️',
+    '2026-11-29':'Cada quilômetro longe só aumenta a minha [saudade]. Já já eu volto 💙'
   };
+  const AWAY_DAYS=['2026-11-28','2026-11-29'];
+  const isAway=()=>AWAY_DAYS.includes(keyOf(todayDate()));
   const BF_DAYS=['2026-11-27'];
   const isBF=()=>BF_DAYS.includes(keyOf(todayDate()));
   const PRINCESS_DAYS=['2026-11-18'];
@@ -527,7 +552,7 @@
   const ZOMBIE_DAYS=['2026-11-20'];
   const isZombie=()=>ZOMBIE_DAYS.includes(keyOf(todayDate()));
   // emojis que sobem na comemoração, conforme o tema do dia
-  const fxSet=()=>isPrincess()?['👑','💖','✨','🌸']:isZombie()?['🧟','🧠','💚','💜']:isBF()?['💋','🏷️','💛','🖤']:['💗','💖','✨','💕'];
+  const fxSet=()=>isPrincess()?['👑','💖','✨','🌸']:isZombie()?['🧟','🧠','💚','💜']:isBF()?['💋','🏷️','💛','🖤']:isAway()?['✈️','💙','💌','🧀']:['💗','💖','✨','💕'];
   function messageFor(day){
     const dk=keyOf(day);
     if(CUSTOM[dk]) return typeof CUSTOM[dk]==='string'?CUSTOM[dk]:CUSTOM[dk].text;
@@ -581,7 +606,7 @@
     $('toast').classList.remove('show');
     const zb=isZombie();
     const bf=isBF();
-    $('peekT').textContent=pr?'👑 Carta real do dia':zb?'🧟 Carta do além':bf?'🏷️ Oferta do dia':'💌 Carta do dia';
+    $('peekT').textContent=pr?'👑 Carta real do dia':zb?'🧟 Carta do além':bf?'🏷️ Oferta do dia':isAway()?'✈️ Carta de BH':'💌 Carta do dia';
     $('peekS').textContent=(pr?'Anotado, alteza! ':zb?'Nhac! ':bf?'Vendido! ':'Anotado! ')+'Falta'+(left>1?'m ':' ')+left;
     $('peekMsg').innerHTML=$('loveMsg').innerHTML;
     $('peek').classList.add('show'); clearTimeout(pt); pt=setTimeout(hidePeek,3600);
@@ -592,8 +617,9 @@
     hidePeek(); $('toast').classList.remove('show');
     const zb=isZombie();
     const bf=isBF();
-    $('celeIcon').textContent=pr?'👑':zb?'🧟':bf?'💋':'💌';
-    $('celeT').textContent=pr?'Tudo tomado, alteza!':zb?'Tudo tomado! Cérebro salvo':bf?'Tudo tomado! Oferta liberada':'Tudo tomado hoje!';
+    const aw=isAway();
+    $('celeIcon').textContent=pr?'👑':zb?'🧟':bf?'💋':aw?'✈️':'💌';
+    $('celeT').textContent=pr?'Tudo tomado, alteza!':zb?'Tudo tomado! Cérebro salvo':bf?'Tudo tomado! Oferta liberada':aw?'Tudo tomado! Orgulho daqui de BH':'Tudo tomado hoje!';
     $('celeMsg').innerHTML=$('loveMsg').innerHTML;
     c.classList.add('show');
     const set=fxSet();
@@ -616,7 +642,7 @@
     else if(!justCompleted && !loveVisible()){
       const it=itemsFor(todayDate()).items; showPeek(it.filter(i=>!state.log[i.key]).length);
     }
-    else toast(isPrincess()?'Anotado, alteza! 👑':isZombie()?'Nhac! Anotado 🧟':isBF()?'Vendido! 💋':'Anotado! 💚');
+    else toast(isPrincess()?'Anotado, alteza! 👑':isZombie()?'Nhac! Anotado 🧟':isBF()?'Vendido! 💋':isAway()?'Anotado! 💙':'Anotado! 💚');
   }
 
   let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1400);}
